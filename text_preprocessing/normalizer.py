@@ -11,27 +11,27 @@ class Normalizer:
         self.lemmatizer = nltk.stem.WordNetLemmatizer()
     
     def normalize(self, x: Union[list, str]):
-        '''
+        """
         Accepts text (possibly tokenized) and makes it suitable for machine processing
-        '''
+        """
         x = self._remove_stop_words(x)
         x = self._denoise(x)
         x = self._lemmatize(x)
         return x
     
     def _remove_stop_words(self, x: Union[list, str]):
-        '''
+        """
         Removes stop words from text in english
-        '''
+        """
         if isinstance(x, str):
             x = x.split(' ')
         stop_words = set(nltk.corpus.stopwords.words('english')) 
         return [w for w in x if not w in stop_words]
     
     def _lemmatize(self, x: Union[list, str]):
-        '''
-        Removes endings, 
-        '''
+        """
+        Removes endings,
+        """
         if isinstance(x, list):
             x = ' '.join(x)
         x = self.lemmatizer.lemmatize(x)
