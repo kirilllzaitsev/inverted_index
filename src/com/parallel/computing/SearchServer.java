@@ -1,6 +1,7 @@
 package com.parallel.computing;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -33,6 +34,14 @@ public class SearchServer  extends Thread{
     }
 
     private void send(ArrayList<String> docsList) {
+        try {
+            String docsString = docsList.toString();
+            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+            dOut.writeUTF(docsString);
+        } catch (IOException e) {
+            System.out.println("Error on server side");
+            e.printStackTrace();
+        }
 
     }
 
