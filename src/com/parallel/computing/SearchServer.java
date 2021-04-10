@@ -37,7 +37,18 @@ public class SearchServer  extends Thread{
     }
 
     private void downService() {
-
+        try {
+            if(!socket.isClosed()) {
+                socket.close();
+                for (SearchServer vr : Main.serverList) {
+                    if(vr.equals(this)) vr.interrupt();
+                    Main.serverList.remove(this);
+                }
+            }
+        } catch (IOException ignored) {}
+        finally {
+            Main.numAvailableConnections.release();
+        }
     }
 
     public ConcurrentHashMap<Integer, ArrayList<String>> getWordToDoc() {
