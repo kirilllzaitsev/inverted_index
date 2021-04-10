@@ -2,21 +2,21 @@ package com.parallel.computing;
 
 import javafx.util.Pair;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Indexer implements Runnable{
     private final ConcurrentHashMap<Integer, ArrayList<String>> map;
     private final ArrayList<Pair<String, Integer>> files2Id;
-    private final Socket tokenizerSocket = new Socket("localhost", 11020);
+    private final Socket tokenizerSocket = new Socket("localhost", 11030);
     private final DataOutputStream tokenizerOut = new DataOutputStream(tokenizerSocket.getOutputStream());
     private final DataInputStream tokenizerIn = new DataInputStream(tokenizerSocket.getInputStream());
 
@@ -39,28 +39,25 @@ public class Indexer implements Runnable{
                 e.printStackTrace();
                 return;
             }
-
-            ArrayList<Integer> tokenIds = new ArrayList<>();
+            int[] tokenizedText;
             try {
-                int numTokens = tokenizerIn.readInt();
-                while (numTokens > 0) {
-                    tokenIds.add(tokenizerIn.readInt());
-                    numTokens--;
+                int numTokens = tokenizerIn.readUnsignedShort();
+                tokenizedText = new int[numTokens];
+                for (int i = 0; i < numTokens; ++i) {
+                    tokenizedText[i] = tokenizerIn.readInt();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
 
-            for (Integer tokenId: tokenIds) {
-                if (this.map.get(tokenId) == null) {
-                    this.map.put(tokenId, new ArrayList<>(Collections.singletonList(fileName)));
-                } else {
-                    this.map.get(tokenId).add(fileName);
-                }
-            }
+            updateIndex(tokenizedText, fileName);
+        }
+    }
 
-
-            System.out.println(x);
+    private void updateIndex(int[] tokenizedText, String fileName) {
+        for(int wordId: tokenizedText){
+            map.computeIfAbsent(wordId, k -> new ArrayList<>()).add(fileName);
         }
     }
 
