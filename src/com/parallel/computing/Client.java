@@ -1,9 +1,8 @@
 package com.parallel.computing;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
 
 
 public class Client {
@@ -21,6 +20,20 @@ public class Client {
     }
 
     public void send() throws IOException {
+        DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+        String word;
+        Scanner sc = new Scanner(System.in);
+        while ((word = sc.nextLine()) != null) {
+            try {
+                dOut.writeUTF(word);
+                DataInputStream dIn = new DataInputStream(socket.getInputStream());
+                String docs = dIn.readUTF();
+                System.out.println(docs);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Client.this.downService();
+            }
+        }
     }
 
     private void downService() {
