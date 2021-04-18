@@ -31,6 +31,10 @@ public class IndexingController extends Thread{
         initConsumer();
     }
 
+    private FileItem composeFileItem(int tweetNum, String username) {
+        return new FileItem(DATA_PATH + "/" + username + "/tweet_" + tweetNum + ".txt", tweetNum);
+    }
+
     private void saveTweet(String text, String username, int tweetNum) throws IOException {
         File file = new File("dataset_v2/" + username + "/tweet_" + tweetNum + ".txt");
         if (!file.exists()){
