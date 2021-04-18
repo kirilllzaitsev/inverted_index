@@ -61,9 +61,9 @@ public class IndexingController extends Thread{
                 text = obj.getString("text");
 
                 saveTweet(text, username, fileCount);
-
                 tasks.add(composeFileItem(fileCount, username));
                 fileCount++;
+
                 if (fileCount % MAX_TASKS_PER_INDEXER == 0) {
                     new Indexer(wordToDoc, new IndexerTask(tasks)).start();
                     tasks = new ArrayList<>();
