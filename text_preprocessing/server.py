@@ -1,28 +1,34 @@
 import asyncio
-import json
+import logging
 
 from normalizer import Normalizer
 from tokenizer import Tokenizer
 
-
-VOCAB_PATH = 'datasets/aclImdb'
-tokenizer = Tokenizer(vocab_path=VOCAB_PATH)
+TOKENIZER_PORT = 11030
+STOP_PHRASE = '_quit_'
+tokenizer = Tokenizer()
 normalizer = Normalizer()
+
+LOGGER = logging.get_logger(__name__)
 
 
 async def handle_client(reader, writer):
     request = None
-    while request != 'quit':
+    while request != STOP_PHRASE:
         length_of_message = int.from_bytes(await reader.read(2), byteorder='big')
-        print(f'Received {length_of_message} bytes')
+        LOGGER.info(f'Received {length_of_message} bytes')
         request = (await reader.read(length_of_message))
-        request = request.decode('utf8')
+        try:
+            request = request.decode('utf-8')
+        except UnicodeDecodeError:
+            print("Emojis in tweets are not yet supported")
+            writer.write(len([]).to_bytes(2, byteorder='big'))
+            continue
         response = normalizer.normalize(request)
         response = tokenizer.tokenize(response)
-        print(f"Tokenized text\n{response}")
         response = tokenizer.convert_tokens_to_ids(response)
         writer.write(len(response).to_bytes(2, byteorder='big'))
-        print(f'Send from tokenizer: {response}')
+        LOGGER.info(f'Send from tokenizer: {response}')
         response = [x.to_bytes(4, byteorder='big') for x in response]
         for x in response:
             writer.write(x)
@@ -31,8 +37,10 @@ async def handle_client(reader, writer):
 
 
 async def run_server():
-    server = await asyncio.start_server(handle_client, 'localhost', 11030)
+    server = await asyncio.start_server(handle_client, 'localhost', TOKENIZER_PORT)
     async with server:
         await server.serve_forever()
 
-asyncio.run(run_server())
+
+if __name__ == "__main__":
+    asyncio.run(run_server())
