@@ -41,6 +41,10 @@ public class Indexer extends Thread{
             int[] tokenizedText;
             try {
                 int numTokens = tokenizerIn.readUnsignedShort();
+                if (numTokens == 0){
+                    System.out.println("Failed to tokenize text. Encoding's incompatible");
+                    continue;
+                }
                 tokenizedText = new int[numTokens];
                 for (int i = 0; i < numTokens; ++i) {
                     tokenizedText[i] = tokenizerIn.readInt();
