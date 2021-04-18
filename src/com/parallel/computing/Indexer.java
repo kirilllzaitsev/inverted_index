@@ -4,10 +4,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -28,11 +28,10 @@ public class Indexer extends Thread{
     public void run() {
         for(FileItem x: files2Id){
             String fileName = x.name;
-            Integer fileId = x.id;
 
             String fileContents;
             try {
-                fileContents = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
+                fileContents = Files.readString(Paths.get(fileName));
                 tokenizerOut.writeUTF(fileContents);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -59,9 +58,8 @@ public class Indexer extends Thread{
     }
 
     private void updateIndex(int[] tokenizedText, String fileName) {
-        for(int wordId: tokenizedText){
-            map.computeIfAbsent(wordId, k -> new ArrayList<>()).add(fileName);
-        }
+        Arrays.stream(tokenizedText).parallel().forEach(wordId ->
+            map.computeIfAbsent(wordId, k -> new ArrayList<>()).add(fileName));
     }
 
     public ConcurrentHashMap<Integer, ArrayList<String>> getMap() {
