@@ -5,6 +5,7 @@
     <li>
       <h3>About The Project</h3>
       <ul>
+        <li><h4>System Model</h4></li>
         <li><h4>Built With</h4></li>
       </ul>
     </li>
@@ -33,6 +34,12 @@ and allows to be up-to-date with trends present in tweets in a real-time fashion
 Following the idea of [inverted index](https://en.wikipedia.org/wiki/Inverted_index), I implemented the app 
 that in real-time finds tweets with specific content, stores them in a local filesystem and allows to do word-based 
 searching right after initializing client connection.
+
+### System Model
+
+<a href="https://github.com/cyberpunk317/inverted_index">
+ <img src="images/highLevelSystemModel.png" alt="SystemModel" width="800" height="600">
+</a>
 
 ### Built With
 
