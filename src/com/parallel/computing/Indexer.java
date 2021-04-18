@@ -1,7 +1,5 @@
 package com.parallel.computing;
 
-import javafx.util.Pair;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,12 +11,13 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class Indexer implements Runnable{
+public class Indexer extends Thread{
     private final ConcurrentHashMap<Integer, ArrayList<String>> map;
-    private final ArrayList<Pair<String, Integer>> files2Id;
+    private final ArrayList<FileItem> files2Id;
     private final Socket tokenizerSocket = new Socket("localhost", 11030);
     private final DataOutputStream tokenizerOut = new DataOutputStream(tokenizerSocket.getOutputStream());
     private final DataInputStream tokenizerIn = new DataInputStream(tokenizerSocket.getInputStream());
+    private final Vocab vocab = new Vocab();
 
     Indexer(ConcurrentHashMap<Integer, ArrayList<String>> wordToDoc, IndexerTask task) throws IOException {
         this.map = wordToDoc;
@@ -27,9 +26,9 @@ public class Indexer implements Runnable{
 
     @Override
     public void run() {
-        for(Pair<String, Integer> x: files2Id){
-            String fileName = x.getKey();
-            Integer fileId = x.getValue();
+        for(FileItem x: files2Id){
+            String fileName = x.name;
+            Integer fileId = x.id;
 
             String fileContents;
             try {
