@@ -6,7 +6,7 @@ class Tokenizer:
     VOCAB_2_ID = {}
     ID_2_VOCAB = {}
     
-    def __init__(self, vocab_path: str = "datasets/aclImdb"):
+    def __init__(self, vocab_path: str = "vocab/imdb.vocab"):
         self.tokenizer = nltk.tokenize.TreebankWordTokenizer()
         Tokenizer.init_vocab(vocab_path)
     
@@ -23,7 +23,7 @@ class Tokenizer:
 
     @classmethod
     def init_vocab(cls, vocab_path: str):
-        with open(vocab_path + '/imdb.vocab') as f:
+        with open(vocab_path) as f:
             for i, word in enumerate(f):
                 word = word.replace('\n', '')
                 cls.VOCAB_2_ID[word] = i

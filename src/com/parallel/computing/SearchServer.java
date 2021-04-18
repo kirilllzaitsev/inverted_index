@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class SearchServer  extends Thread{
+public class SearchServer extends Thread{
     private final Socket socket;
     private final ConcurrentHashMap<Integer, ArrayList<String>> wordToDoc;
     private final HashMap<String, Integer> wordToId = new HashMap<>();
@@ -20,12 +20,12 @@ public class SearchServer  extends Thread{
         this.socket = socket;
         this.wordToDoc = wordToDoc;
         initWordToIdMap();
-        start();
     }
 
     private void initWordToIdMap() {
+        String vocabPath = "vocab/imdb.vocab";
         try {
-            Scanner input = new Scanner(new File("datasets/aclImdb/imdb.vocab"));
+            Scanner input = new Scanner(new File(vocabPath));
             int count = 0;
             while (input.hasNext()) {
                 this.wordToId.put(input.next(), count);
@@ -38,7 +38,6 @@ public class SearchServer  extends Thread{
 
     @Override
     public void run() {
-
         try {
             while (true) {
                 DataInputStream dIn = new DataInputStream(socket.getInputStream());
