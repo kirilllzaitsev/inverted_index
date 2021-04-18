@@ -27,7 +27,9 @@ public class Main {
                 Main.numAvailableConnections.acquire();
                 Socket socket = server.accept();
                 try {
-                    serverList.add(new SearchServer(socket, wordToDoc));
+                    SearchServer searchServer = new SearchServer(socket, wordToDoc);
+                    serverList.add(searchServer);
+                    searchServer.start();
                 } finally {
                     System.out.println("Available connection slots: " +
                             Main.numAvailableConnections.availablePermits());
