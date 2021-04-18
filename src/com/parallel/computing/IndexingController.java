@@ -79,7 +79,7 @@ public class IndexingController extends Thread{
     }
 
     private void saveTweet(String text, String username, int tweetNum) throws IOException {
-        File file = new File("dataset_v2/" + username + "/tweet_" + tweetNum + ".txt");
+        File file = new File(DATA_PATH + "/" + username + "/tweet_" + tweetNum + ".txt");
         if (!file.exists()){
             file.getParentFile().mkdirs();
         }

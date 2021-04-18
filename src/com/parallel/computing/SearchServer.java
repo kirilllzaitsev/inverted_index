@@ -29,7 +29,7 @@ public class SearchServer  extends Thread{
             int count = 0;
             while (input.hasNext()) {
                 this.wordToId.put(input.next(), count);
-                count = count + 1;
+                count++;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,13 +79,5 @@ public class SearchServer  extends Thread{
         finally {
             Main.numAvailableConnections.release();
         }
-    }
-
-    public ConcurrentHashMap<Integer, ArrayList<String>> getWordToDoc() {
-        return wordToDoc;
-    }
-
-    public Socket getSocket() {
-        return socket;
     }
 }
