@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+}
+
+apply plugin: 'application'
+
+group 'com.parallel.computing'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['tests']
+        }
+    }
+}
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.5.0'
+    compile 'org.json:json:20210307'
+    compile 'junit:junit:4.12'
+    compile 'org.junit.jupiter:junit-jupiter:5.8.0-M1'
+}
+
+test {
+    useJUnitPlatform()
+    reports.html.enabled = false
+}
+
+configurations {
+    binaryTestResultsElements {
+        canBeResolved = false
+        canBeConsumed = true
+        attributes {
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+            attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'test-report-data'))
+        }
+        outgoing.artifact(test.binaryResultsDirectory)
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Implementation-Title': 'gscc-groupme-logs',
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task runServer(type: Exec) {
+    dependsOn jar
+    group = "Execution"
+    description = "Run server"
+    ext {javaMainClass = "com.parallel.computing.Main"}
+    commandLine "java", "-classpath", jar.archiveFile.get(), javaMainClass
+}
+
+task runClient(type: Exec) {
+    dependsOn jar
+    group = "Execution"
+    description = "Run client"
+    standardInput = System.in
+    ext {javaMainClass = "com.parallel.computing.ClientSession"}
+    commandLine "java", "-classpath", jar.archiveFile.get(), javaMainClass
+}

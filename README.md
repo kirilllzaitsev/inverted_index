@@ -69,12 +69,13 @@ In order to run the app you need:
    ```
 2. Install Python dependencies
    ```sh
-   pip install -r requirements.txt
+   pip3 install pipenv
+   pipenv shell
+   pipenv install --ignore-pipfile
    ```
 3. Following this [guide](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api),
    obtain Twitter API credentials and setup them in kafka/kafka_producer.py
    ```JS
-    API_KEY = 'ENTER YOUR API';
     TWITTER_APP_KEY = 'YOUR APP KEY'
     TWITTER_APP_SECRET = 'YOUR APP SECRET'
     TWITTER_KEY = 'YOUR KEY'
@@ -92,7 +93,7 @@ Start streaming tweets:
 ```
 python kafka/kafka_producer.py
 ```
-(Optional) Create Client session:
+Create client session:
 ```
 ./gradlew runClient
 ```

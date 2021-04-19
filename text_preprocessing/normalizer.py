@@ -1,5 +1,5 @@
 import re
-from typing import Union
+from typing import Union, List
 
 import nltk
 from bs4 import BeautifulSoup
@@ -10,7 +10,7 @@ class Normalizer:
     def __init__(self):
         self.lemmatizer = nltk.stem.WordNetLemmatizer()
     
-    def normalize(self, x: Union[list, str]):
+    def normalize(self, x: Union[list, str]) -> List[str]:
         """
         Accepts text (possibly tokenized) and makes it suitable for machine processing
         """
@@ -19,7 +19,7 @@ class Normalizer:
         x = self._lemmatize(x)
         return x
     
-    def _remove_stop_words(self, x: Union[list, str]):
+    def _remove_stop_words(self, x: Union[list, str]) -> List[str]:
         """
         Removes stop words from text in english
         """
@@ -28,7 +28,7 @@ class Normalizer:
         stop_words = set(nltk.corpus.stopwords.words('english')) 
         return [w for w in x if not w in stop_words]
     
-    def _lemmatize(self, x: Union[list, str]):
+    def _lemmatize(self, x: Union[list, str]) -> List[str]:
         """
         Removes endings,
         """
@@ -37,7 +37,7 @@ class Normalizer:
         x = self.lemmatizer.lemmatize(x)
         return x
     
-    def _denoise(self, x):
+    def _denoise(self, x: Union[list, str]) -> str:
         if isinstance(x, list):
             x = ' '.join(x)
             
