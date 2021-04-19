@@ -17,18 +17,34 @@ import java.util.logging.Logger;
 public class Indexer extends Thread{
     private final ConcurrentHashMap<Integer, ArrayList<String>> map;
     private final ArrayList<FileItem> files2Id;
-    private final Socket tokenizerSocket = new Socket("localhost", 11030);
-    private final DataOutputStream tokenizerOut = new DataOutputStream(tokenizerSocket.getOutputStream());
-    private final DataInputStream tokenizerIn = new DataInputStream(tokenizerSocket.getInputStream());
+    private Socket tokenizerSocket;
+    private DataOutputStream tokenizerOut;
+    private DataInputStream tokenizerIn;
     private final Logger logger = Logger.getLogger(Indexer.class.getName());
 
     Indexer(ConcurrentHashMap<Integer, ArrayList<String>> wordToDoc, IndexerTask task) throws IOException {
         this.map = wordToDoc;
         this.files2Id = task.getFiles2Id();
     }
+    
+    public void initSocket() throws IOException {
+        tokenizerSocket = new Socket("localhost", 11030);
+    }
+
+    public void initDataStreams() throws IOException {
+        tokenizerOut = new DataOutputStream(tokenizerSocket.getOutputStream());
+        tokenizerIn = new DataInputStream(tokenizerSocket.getInputStream());
+    }
 
     @Override
     public void run() {
+        try {
+            initSocket();
+            initDataStreams();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
         this.files2Id.stream()
                 .map((fi) ->
                         CompletableFuture.supplyAsync(() -> this.processFileItem(fi))
@@ -37,7 +53,7 @@ public class Indexer extends Thread{
         this.logger.info("Processed " + this.files2Id.size() + " tweets");
     }
 
-    private Boolean getFaultyFileItem(Throwable throwable) {
+    protected Boolean getFaultyFileItem(Throwable throwable) {
         this.logger.warning("Something failed when processing file\n" + throwable);
         return true;
     }
@@ -76,9 +92,5 @@ public class Indexer extends Thread{
     private void updateIndex(int[] tokenizedText, String fileName) {
         Arrays.stream(tokenizedText).parallel().forEach(wordId ->
             map.computeIfAbsent(wordId, k -> new ArrayList<>()).add(fileName));
-    }
-
-    public ConcurrentHashMap<Integer, ArrayList<String>> getMap() {
-        return map;
     }
 }
