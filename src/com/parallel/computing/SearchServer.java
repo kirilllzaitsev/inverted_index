@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class SearchServer  extends Thread{
+public class SearchServer extends Thread{
     private final Socket socket;
     private final ConcurrentHashMap<Integer, ArrayList<String>> wordToDoc;
     private final HashMap<String, Integer> wordToId = new HashMap<>();
@@ -19,17 +19,16 @@ public class SearchServer  extends Thread{
     public SearchServer(Socket socket, ConcurrentHashMap<Integer, ArrayList<String>> wordToDoc) {
         this.socket = socket;
         this.wordToDoc = wordToDoc;
-        initWordToIdMap();
-        start();
     }
 
-    private void initWordToIdMap() {
+    protected void initWordToIdMap() {
+        String vocabPath = "vocab/imdb.vocab";
         try {
-            Scanner input = new Scanner(new File("datasets/aclImdb/imdb.vocab"));
+            Scanner input = new Scanner(new File(vocabPath));
             int count = 0;
             while (input.hasNext()) {
                 this.wordToId.put(input.next(), count);
-                count = count + 1;
+                count++;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,7 +37,7 @@ public class SearchServer  extends Thread{
 
     @Override
     public void run() {
-
+        initWordToIdMap();
         try {
             while (true) {
                 DataInputStream dIn = new DataInputStream(socket.getInputStream());
@@ -54,7 +53,7 @@ public class SearchServer  extends Thread{
         }
     }
 
-    private void send(ArrayList<String> docsList) {
+    protected void send(ArrayList<String> docsList) {
         try {
             String docsString = docsList.toString();
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
@@ -66,7 +65,7 @@ public class SearchServer  extends Thread{
 
     }
 
-    private void downService() {
+    protected void downService() {
         try {
             if(!socket.isClosed()) {
                 socket.close();
@@ -81,11 +80,7 @@ public class SearchServer  extends Thread{
         }
     }
 
-    public ConcurrentHashMap<Integer, ArrayList<String>> getWordToDoc() {
-        return wordToDoc;
-    }
-
-    public Socket getSocket() {
-        return socket;
+    public HashMap<String, Integer> getWordToId(){
+        return this.wordToId;
     }
 }

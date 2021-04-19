@@ -5,6 +5,7 @@
     <li>
       <h3>About The Project</h3>
       <ul>
+        <li><h4>System Model</h4></li>
         <li><h4>Built With</h4></li>
       </ul>
     </li>
@@ -34,6 +35,12 @@ Following the idea of [inverted index](https://en.wikipedia.org/wiki/Inverted_in
 that in real-time finds tweets with specific content, stores them in a local filesystem and allows to do word-based 
 searching right after initializing client connection.
 
+### System Model
+
+<a href="https://github.com/cyberpunk317/inverted_index">
+ <img src="images/highLevelSystemModel.png" alt="SystemModel" width="800" height="600">
+</a>
+
 ### Built With
 
 * [Java 8](https://google.com)
@@ -62,12 +69,13 @@ In order to run the app you need:
    ```
 2. Install Python dependencies
    ```sh
-   pip install -r requirements.txt
+   pip3 install pipenv
+   pipenv shell
+   pipenv install --ignore-pipfile
    ```
 3. Following this [guide](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api),
    obtain Twitter API credentials and setup them in kafka/kafka_producer.py
    ```JS
-    API_KEY = 'ENTER YOUR API';
     TWITTER_APP_KEY = 'YOUR APP KEY'
     TWITTER_APP_SECRET = 'YOUR APP SECRET'
     TWITTER_KEY = 'YOUR KEY'
@@ -85,7 +93,7 @@ Start streaming tweets:
 ```
 python kafka/kafka_producer.py
 ```
-(Optional) Create Client session:
+Create client session:
 ```
 ./gradlew runClient
 ```
