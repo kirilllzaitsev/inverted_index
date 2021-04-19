@@ -6,7 +6,6 @@ public class FileItem {
     public final Integer id;
 
     FileItem(String name, Integer id){
-
         this.name = name;
         this.id = id;
     }

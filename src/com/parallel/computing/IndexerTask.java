@@ -1,7 +1,6 @@
 package com.parallel.computing;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 
 public class IndexerTask {
@@ -16,7 +15,4 @@ public class IndexerTask {
         return files2Id;
     }
 
-    public ArrayList<String> getFileNames() {
-        return (ArrayList<String>) files2Id.stream().map(x -> x.name).collect(Collectors.toList());
-    }
 }

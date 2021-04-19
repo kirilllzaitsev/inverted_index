@@ -9,7 +9,7 @@ STOP_PHRASE = '_quit_'
 tokenizer = Tokenizer()
 normalizer = Normalizer()
 
-LOGGER = logging.get_logger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 def convert_request_to_response(request: str) -> str:
