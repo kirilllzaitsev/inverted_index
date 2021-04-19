@@ -16,13 +16,36 @@ sourceSets {
             srcDirs = ['src']
         }
     }
+    test {
+        java {
+            srcDirs = ['tests']
+        }
+    }
 }
 dependencies {
-    compile 'junit:junit:4.12'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.5.0'
     compile 'org.json:json:20210307'
+    compile 'junit:junit:4.12'
+    compile 'org.junit.jupiter:junit-jupiter:5.8.0-M1'
+}
+
+test {
+    useJUnitPlatform()
+    reports.html.enabled = false
+}
+
+configurations {
+    binaryTestResultsElements {
+        canBeResolved = false
+        canBeConsumed = true
+        attributes {
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+            attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'test-report-data'))
+        }
+        outgoing.artifact(test.binaryResultsDirectory)
+    }
 }
 
 jar {
