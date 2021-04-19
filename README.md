@@ -43,8 +43,8 @@ searching right after initializing client connection.
 
 ### Built With
 
-* [Java 8](https://google.com)
-* [Python 3.7](https://google.com)
+* [Java 8](https://en.wikipedia.org/wiki/Java_version_history)
+* [Python 3.7](https://www.python.org/downloads/release/python-373/)
 * [Kafka 2.10](https://kafka.apache.org)
 * [Gradle 6.7](https://gradle.org/)
 
@@ -115,3 +115,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 * [README formatting guide](https://github.com/othneildrew/Best-README-Template)
+* [Java CI/CD guide](https://habr.com/ru/company/jugru/blog/505994/)
+* [JUnit 5 with Gradle](https://docs.gradle.org/current/userguide/java_testing.html)
