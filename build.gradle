@@ -1,6 +1,9 @@
 plugins {
     id 'java'
+    id "com.bmuschko.docker-java-application" version "6.7.0"
 }
+
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 
 apply plugin: 'application'
 
@@ -9,7 +12,30 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
+apply plugin: 'com.bmuschko.docker-java-application'
+
+task createMainDockerfile(type: Dockerfile) {
+    dependsOn jar
+    ext {javaMainClass = "com.parallel.computing.Main"}
+    destFile = project.file("app_server.Dockerfile")
+    from 'openjdk:8'
+    copyFile 'build/libs/'+jar.archiveName, 'app.jar'
+    entryPoint 'java', '-cp', 'app.jar', javaMainClass
+    exposePort 3333
+}
+
+task createClientDockerfile(type: Dockerfile) {
+    dependsOn jar
+    ext {javaMainClass = "com.parallel.computing.ClientSession"}
+    destFile = project.file("client.Dockerfile")
+    from 'openjdk:8'
+    copyFile 'build/libs/'+jar.archiveName, 'app.jar'
+    entryPoint 'java', '-cp', 'app.jar', javaMainClass
+    exposePort 3333
+}
+
 sourceSets {
     main {
         java {
@@ -22,6 +48,7 @@ sourceSets {
         }
     }
 }
+
 dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'

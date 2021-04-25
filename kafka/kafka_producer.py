@@ -12,7 +12,7 @@ TWITTER_APP_SECRET = 'YOUR APP SECRET'
 TWITTER_KEY = 'YOUR KEY'
 TWITTER_SECRET = 'YOUR SECRET'
 
-INDEX_APP_TOPIC = 'index_app_topic'
+INDEX_APP_TOPIC = 'inverted_index_app'
 
 
 class StreamListener(tweepy.StreamListener):
@@ -35,7 +35,8 @@ class StreamListener(tweepy.StreamListener):
 def main():
     args = sys.argv[1:]
     parser = argparse.ArgumentParser()
-    parser.add_argument('-t', '--tags', dest='tags', nargs='+', help='Twitter tags to track', required=True)
+    parser.add_argument('-lt', '--lookup_tags', dest='tags', nargs='+', help='Twitter tags to track', required=False,
+                        default=['bitcoin', 'war', 'biden'])
     args = parser.parse_args(args)
     tags = args.tags
     producer = KafkaProducer(bootstrap_servers=['localhost:9092'],

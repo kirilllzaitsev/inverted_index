@@ -34,7 +34,7 @@ public class IndexingController extends Thread{
     @Override
     public void run() {
         initConsumer();
-        String KAFKA_TOPIC = "index_app_topic";
+        String KAFKA_TOPIC = "inverted_index_app";
         consumer.subscribe(Collections.singletonList(KAFKA_TOPIC));
         try {
             runConsumerLoop();
