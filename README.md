@@ -67,13 +67,7 @@ In order to run the app you need:
    ```sh
    git clone https://github.com/cyberpunk317/inverted_index.git
    ```
-2. Install Python dependencies
-   ```sh
-   pip3 install pipenv
-   pipenv shell
-   pipenv install --ignore-pipfile
-   ```
-3. Following this [guide](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api),
+2. Following this [guide](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api),
    obtain Twitter API credentials and setup them in kafka/kafka_producer.py
    ```JS
     TWITTER_APP_KEY = 'YOUR APP KEY'
@@ -85,19 +79,25 @@ In order to run the app you need:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Launch the server:
+Create Dockerfiles for client and server:
 ```
-./gradlew runServer
+./gradlew clean build createClientDockerfile createMainDockerfile
 ```
-Start streaming tweets:
+Start application:
 ```
-python kafka/kafka_producer.py
+docker-compose up
 ```
-Create client session:
+Enter client session and start typing words of interest:
 ```
-./gradlew runClient
+docker build -f client.Dockerfile -t client:latest . && docker run -it --network=host client:latest bash
 ```
+Server will return location of tweets in the format 'dataset_v2/<username>/tweet_N.txt' that contain these words:
+  
+For example:
 
+You entered: war
+
+Server response: [dataset_v2/Veeresh Dambal/tweet_30.txt, dataset_v2/pedro schliesser/tweet_1.txt]
 
 
 <!-- ROADMAP -->
