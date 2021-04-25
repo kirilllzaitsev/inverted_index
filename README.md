@@ -114,6 +114,10 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
+* [Kafka cluster setup](https://github.com/wurstmeister/kafka-docker#kafka-docker)
+* [Packaging Java app in containers (using Gradle)](https://bmuschko.github.io/gradle-docker-plugin/)
+* [Java CI/CD guide](https://habr.com/ru/company/jugru/blog/505994/)
+* [JUnit 5 with Gradle](https://docs.gradle.org/current/userguide/java_testing.html)
 * [README formatting guide](https://github.com/othneildrew/Best-README-Template)
 * [Java CI/CD guide](https://habr.com/ru/company/jugru/blog/505994/)
 * [JUnit 5 with Gradle](https://docs.gradle.org/current/userguide/java_testing.html)

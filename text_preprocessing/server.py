@@ -4,6 +4,7 @@ import logging
 from normalizer import Normalizer
 from tokenizer import Tokenizer
 
+TOKENIZER_HOST = 'localhost'
 TOKENIZER_PORT = 11030
 STOP_PHRASE = '_quit_'
 tokenizer = Tokenizer()
@@ -37,7 +38,7 @@ async def handle_client(reader, writer):
         try:
             request = request.decode('utf-8')
         except UnicodeDecodeError:
-            print("Emojis in tweets are not yet supported")
+            LOGGER.info("Emojis in tweets are not yet supported")
             writer.write(len([]).to_bytes(2, byteorder='big'))
             continue
 
@@ -48,7 +49,7 @@ async def handle_client(reader, writer):
 
 
 async def run_server():
-    server = await asyncio.start_server(handle_client, 'localhost', TOKENIZER_PORT)
+    server = await asyncio.start_server(handle_client, TOKENIZER_HOST, TOKENIZER_PORT)
     async with server:
         await server.serve_forever()
 
