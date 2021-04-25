@@ -56,10 +56,7 @@ searching right after initializing client connection.
 ### Prerequisites
 
 In order to run the app you need: 
-* Java 8 [installation guide](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-18-04)
-* Python 3.7 [installation guide](https://linuxize.com/post/how-to-install-python-3-7-on-debian-9/)
-* Kafka [installation guide](https://kafka.apache.org/quickstart)
-* Gradle [installation guide](https://gradle.org/install/)
+* Docker compose [installation guide](https://docs.docker.com/compose/install/)
 
 ### Installation
 
@@ -91,13 +88,11 @@ Enter client session and start typing words of interest:
 ```
 docker build -f client.Dockerfile -t client:latest . && docker run -it --network=host client:latest bash
 ```
-Server will return location of tweets in the format 'dataset_v2/<username>/tweet_N.txt' that contain these words:
-  
-For example:
-
+Server will return location of tweets in the format 'dataset_v2/<username>/tweet_N.txt'. For example:
+```
 You entered: war
-
 Server response: [dataset_v2/Veeresh Dambal/tweet_30.txt, dataset_v2/pedro schliesser/tweet_1.txt]
+```
 
 
 <!-- ROADMAP -->
