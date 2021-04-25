@@ -1,15 +1,29 @@
 plugins {
     id 'java'
+    id "com.bmuschko.docker-java-application" version "6.7.0"
 }
 
 apply plugin: 'application'
+
 
 group 'com.parallel.computing'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
+apply plugin: 'com.bmuschko.docker-java-application'
+
+docker {
+    javaApplication {
+        baseImage = 'openjdk:8'
+        maintainer = 'cyberpank317@gmail.com'
+        ports = [3333]
+        mainClassName = 'com.parallel.computing.' + project.getProperty("mode")
+    }
+}
+
 sourceSets {
     main {
         java {
@@ -22,6 +36,7 @@ sourceSets {
         }
     }
 }
+
 dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
