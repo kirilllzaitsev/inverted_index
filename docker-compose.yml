@@ -1,0 +1,51 @@
+version: "3"
+services:
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_CREATE_TOPICS: "inverted_index_app:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  kafka_producer:
+    image: kafka_producer:latest
+    build:
+      context: .
+      dockerfile: kafka_producer.Dockerfile
+    ports:
+      - "9092:9092"
+    network_mode: host
+    depends_on:
+      - kafka
+
+  tokenizer:
+    image: tokenizer:latest
+    build:
+      context: .
+      dockerfile: tokenizer.Dockerfile
+    ports:
+      - "11030:11030"
+    network_mode: "host"
+
+  main:
+    image: app_server:latest
+    build:
+      context: ./build/docker/
+      dockerfile: app_server.Dockerfile
+    ports:
+      - "3333:3333"
+      - "11030:11030"
+    network_mode: "host"
+    volumes:
+      - ./vocab/:/app/vocab
+      - ./datasets_v2/:/app/datasets_v2
