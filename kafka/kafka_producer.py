@@ -22,7 +22,7 @@ class StreamListener(tweepy.StreamListener):
 
     def on_status(self, status) -> None:
         self.send({'username': status.user.name, 'text': status.text})
-        sleep(1)
+        sleep(2)
 
     def on_error(self, status_code: int) -> Optional[bool]:
         if status_code == 420:
@@ -35,12 +35,10 @@ class StreamListener(tweepy.StreamListener):
 def main():
     args = sys.argv[1:]
     parser = argparse.ArgumentParser()
-    parser.add_argument('-lt', '--lookup_tags', dest='tags', nargs='+', help='Twitter tags to track', required=False,
+    parser.add_argument('-twt', '--tags', dest='tags', nargs='+', help='Twitter tags to track', required=False,
                         default=['bitcoin', 'war', 'biden'])
     args = parser.parse_args(args)
     tags = args.tags
-    producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
-                             value_serializer=lambda x: dumps(x).encode('utf-8'))
 
     auth = tweepy.OAuthHandler(TWITTER_APP_KEY, TWITTER_APP_SECRET)
     auth.set_access_token(TWITTER_KEY, TWITTER_SECRET)
