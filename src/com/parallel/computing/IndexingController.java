@@ -23,7 +23,7 @@ public class IndexingController extends Thread{
 
     private final ConcurrentHashMap<Integer, ArrayList<String>> wordToDoc;
     private final int MAX_TASKS_PER_INDEXER = 5;
-    private final String DATA_PATH = "dataset_v2";
+    private final String DATA_PATH = "/data";
     private final Logger log = Logger.getLogger(IndexingController.class.getName());
     private KafkaConsumer<String, String> consumer;
 
@@ -33,10 +33,13 @@ public class IndexingController extends Thread{
 
     @Override
     public void run() {
+        System.out.println("Initializing consumer...");
         initConsumer();
+        System.out.println("Initialized consumer");
         String KAFKA_TOPIC = "inverted_index_app";
         consumer.subscribe(Collections.singletonList(KAFKA_TOPIC));
         try {
+            System.out.println("Started consumer loop");
             runConsumerLoop();
         } catch (Exception e) {
             log.info("Unexpected error" + e);
@@ -65,6 +68,7 @@ public class IndexingController extends Thread{
                 fileCount++;
 
                 if (fileCount % MAX_TASKS_PER_INDEXER == 0) {
+                    System.out.println("Indexer with "+tasks.size()+" tasks initiated");
                     new Indexer(wordToDoc, new IndexerTask(tasks)).start();
                     tasks = new ArrayList<>();
                 }

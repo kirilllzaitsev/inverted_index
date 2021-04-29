@@ -47,5 +47,5 @@ services:
       - "11030:11030"
     network_mode: "host"
     volumes:
-      - ./vocab/:/vocab
-      - ./datasets_v2/:/datasets_v2
+      - ./vocab/:/vocab:rw
+      - "./data:/data:rw"
