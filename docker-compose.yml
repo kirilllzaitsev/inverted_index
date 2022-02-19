@@ -22,8 +22,6 @@ services:
     build:
       context: .
       dockerfile: kafka_producer.Dockerfile
-    ports:
-      - "9092:9092"
     network_mode: host
     depends_on:
       - kafka
@@ -33,8 +31,6 @@ services:
     build:
       context: .
       dockerfile: tokenizer.Dockerfile
-    ports:
-      - "11030:11030"
     network_mode: "host"
 
   main:
@@ -42,9 +38,6 @@ services:
     build:
       context: .
       dockerfile: app_server.Dockerfile
-    ports:
-      - "3333:3333"
-      - "11030:11030"
     network_mode: "host"
     volumes:
       - ./vocab/:/vocab
