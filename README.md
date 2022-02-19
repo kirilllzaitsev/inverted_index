@@ -80,14 +80,17 @@ Create Dockerfiles for client and server:
 ```
 ./gradlew clean build createClientDockerfile createMainDockerfile
 ```
+This will produce app_server.Dockerfile and client.Dockerfile in the root directory.
+
 Start application:
 ```
 docker-compose up
 ```
-Enter client session and start typing words of interest:
+Launch a client session:
 ```
 docker build -f client.Dockerfile -t client:latest . && docker run -it --network=host client:latest bash
 ```
+Start typing words of interest.
 Server will return location of tweets in the format 'dataset_v2/<username>/tweet_N.txt'. For example:
 ```
 You entered: war
