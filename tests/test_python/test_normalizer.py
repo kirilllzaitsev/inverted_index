@@ -1,7 +1,7 @@
 from unittest import TestCase
 from text_preprocessing.normalizer import Normalizer
 
-# python -m nltk.downloader wordnet omw-1.4 punkt stopwords
+
 class TestNormalizer(TestCase):
     def setUp(self) -> None:
         self.normalizer = Normalizer()
