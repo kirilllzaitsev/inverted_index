@@ -17,7 +17,7 @@ class TestNormalizer(TestCase):
         """
 
         res = self.normalizer.normalize(input_str)
-        exp_res = ["notags", "content"]
+        exp_res = "notags content"
 
         assert res == exp_res
 
