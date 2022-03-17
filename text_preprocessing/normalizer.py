@@ -47,15 +47,15 @@ class Normalizer:
             return x
 
         def remove_between_square_brackets(x):
-            x = re.sub("\[[^]]*\]", "", x)
+            x = re.sub(r"\[[^]]*\]", "", x)
             x = re.sub(r"http\S+", "", x)
             return x
 
         def remove_rating(x):
-            return re.sub("\W\d/\d+\S*", "", x)
+            return re.sub(r"\W\d/\d+\S*", "", x)
 
         x = x.lower()
-        x = re.sub(",|\.|!|\?", "", x)
+        x = re.sub(r",|\.|!|\?", "", x)
         x = strip_html(x)
         x = remove_between_square_brackets(x)
         x = remove_rating(x)

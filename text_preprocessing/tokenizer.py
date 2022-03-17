@@ -1,3 +1,4 @@
+from typing import List
 import nltk
 
 
@@ -10,13 +11,13 @@ class Tokenizer:
         self.tokenizer = nltk.tokenize.TreebankWordTokenizer()
         Tokenizer.init_vocab(vocab_path)
 
-    def tokenize(self, x: str):
+    def tokenize(self, x: str) -> List[str]:
         return self.tokenizer.tokenize(x)
 
-    def convert_tokens_to_ids(self, x: list):
+    def convert_tokens_to_ids(self, x: list) -> List[int]:
         return [self.VOCAB_2_ID[w] for w in x if w in self.VOCAB_2_ID.keys()]
 
-    def convert_ids_to_tokens(self, x: list):
+    def convert_ids_to_tokens(self, x: list) -> List[str]:
         return [self.ID_2_VOCAB[i] for i in x]
 
     @classmethod
