@@ -30,8 +30,6 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
 
       - name: Install other dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
