@@ -185,3 +185,6 @@ datasets/
 .ipynb_checkpoints/
 *.ipynb
 .gradle/
+bin/
+tags
+.creds
