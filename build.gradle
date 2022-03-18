@@ -29,7 +29,7 @@ task createMainDockerfile(type: Dockerfile) {
 task createClientDockerfile(type: Dockerfile) {
     dependsOn jar
     ext {javaMainClass = "com.parallel.computing.ClientSession"}
-    destFile = project.file("client.Dockerfile")
+    destFile = project.file("app_client.Dockerfile")
     from 'openjdk:8'
     copyFile 'build/libs/'+jar.archiveName, 'app.jar'
     entryPoint 'java', '-cp', 'app.jar', javaMainClass
