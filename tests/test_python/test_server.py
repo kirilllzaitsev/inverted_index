@@ -1,7 +1,7 @@
-import logging
 import struct
 import asyncio
 
+import pytest
 
 from text_preprocessing.server import (
     run_server,
@@ -10,15 +10,14 @@ from text_preprocessing.server import (
     STOP_PHRASE,
     TOKENIZER_HOST,
     TOKENIZER_PORT,
-    send_response,
 )
 from text_preprocessing.tokenizer import Tokenizer
 
-    def test_send_response(self):
-        raise NotImplementedError
 
-    def test_handle_client(self):
-        raise NotImplementedError
+@pytest.fixture(scope="module")
+def tokenizer(vocab_path="vocab/imdb.vocab"):
+    tokenizer = Tokenizer(vocab_path)
+    return tokenizer
 
 
 @pytest.fixture(scope="module")
@@ -47,27 +46,6 @@ class TestTokenizationServer:
 
         res_tokens = convert_request_to_response(message)
         exp_tokens = tokenizer.convert_tokens_to_ids(message.split(" "))
-
-        assert res_tokens == exp_tokens
-
-    @pytest.mark.asyncio
-    @pytest.mark.skip
-    async def test_send_response(self):
-        response_tokens = [90, 102]
-
-        reader, writer = await asyncio.open_connection(TOKENIZER_HOST, 8888)
-
-        send_response(writer=writer, response=response_tokens)
-        await writer.drain()
-        logging.warning("receiving")
-        resp_len = int.from_bytes(await reader.read(2), byteorder="big")
-        logging.warning(f"CLIENT: Received {resp_len!r}")
-        res_tokens = [
-            int.from_bytes(await reader.read(4), byteorder="big")
-            for _ in range(resp_len)
-        ]
-        logging.info(f"CLIENT received {res_tokens}")
-        exp_tokens = response_tokens
 
         assert res_tokens == exp_tokens
 

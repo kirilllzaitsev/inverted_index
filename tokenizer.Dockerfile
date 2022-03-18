@@ -5,5 +5,5 @@ RUN pip install pipenv && pipenv sync
 EXPOSE 11030
 COPY text_preprocessing ./
 COPY vocab/ ./vocab
-RUN pipenv run python -m nltk.downloader stopwords wordnet
+RUN pipenv run python -m nltk.downloader wordnet omw-1.4 punkt stopwords
 CMD ["pipenv", "run", "python", "server.py"]

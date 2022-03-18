@@ -186,5 +186,3 @@ datasets/
 *.ipynb
 .gradle/
 bin/
-tags
-.creds
